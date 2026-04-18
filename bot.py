@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAHk0XYSysz4nJElHEq4y7eIbIBqUL9Or3M"
+BOT_TOKEN = "8760406918:AAG_Zt44bGfTAuguODT0lAHGzKPntBok_vg"
 ADMIN_ID = ["8487946379"]
 USERS_FILE = "users.json"
 KEYS_FILE = "keys.json"
@@ -597,7 +597,7 @@ def broadcast(msg):
         except:
             fail_count += 1
     
-        bot.reply_to(msg, f"""✅ BROADCAST SENT!
+    bot.reply_to(msg, f"""✅ BROADCAST SENT!
 
 📨 Message: {message}
 ✅ Delivered: {success_count} users
@@ -834,4 +834,3 @@ print("""
 """)
 
 bot.infinity_polling()
-```
