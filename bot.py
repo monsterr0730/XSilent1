@@ -148,11 +148,11 @@ Example: /attack 1.1.1.1 443 60 udp""")
 @bot.message_handler(commands=['stats'])
 def stats(msg):
     uid = str(msg.chat.id)
-    stats_msg = f"{uid} USER STATISTICS
+    stats_msg = f"""{uid} USER STATISTICS
 
 - User ID: {uid}
-- Status: {'Authorized' if uid in users or active}
-- Cooldown: {'Active' if uid in cooldown else None}
+- Status: {'Authorized' if uid in users else 'Not Authorized'}
+- Cooldown: {'Active' if uid in cooldown else 'None'}
 
 API Info:
 - Endpoint: {API_URL}
