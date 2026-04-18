@@ -15,7 +15,7 @@ BOT_TOKEN = "8760406918:AAFwwyqjFm-mbwlw7bPfro7pSTdGwSfeLVE"
 ADMIN_ID = ["8487946379"]
 USERS_FILE = "users.json"
 KEYS_FILE = "keys.json"
-API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
+API_URL = "http://cnc.teamc2.xyz:5001/api/attack"  # Note: 5001 not 500
 API_KEY = "PFC10J"
 
 # ========== DATA STRUCTURES ==========
