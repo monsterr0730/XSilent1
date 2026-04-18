@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAHfT23i9_dEGTlr4EMeYU0o0o49hCGo8uo"
+BOT_TOKEN = "8760406918:AAHc9ZluFAu0STj9Vg16EddWWr4qfoF8tA4"
 ADMIN_ID = ["8487946379"]
 USERS_FILE = "users.json"
 KEYS_FILE = "keys.json"
