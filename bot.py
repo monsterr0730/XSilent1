@@ -144,7 +144,7 @@ def methods(msg):
    Ports: 25565, 27015, 7777
 
 Example: /attack 1.1.1.1 443 60 udp""")
-    @bot.message_handler(commands=['stats'])
+    @bot.message_handler(commands=['stats']
 def stats(msg):
     uid = str(msg.chat.id)
     stats_msg = f"""📊 USER STATISTICS
