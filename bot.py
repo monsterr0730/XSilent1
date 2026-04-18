@@ -467,7 +467,7 @@ def add_user(msg):
     users_data["users"] = users
     save_users(users_data)
     
-    bot.reply_to(msg, f"""✅ USER ADDED!
+        bot.reply_to(msg, f"""✅ USER ADDED!
 
 👤 User: {new_user}
 ✅ Now has attack access!
