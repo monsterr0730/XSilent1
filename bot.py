@@ -597,7 +597,7 @@ def broadcast(msg):
         except:
             fail_count += 1
     
-    bot.reply_to(msg, f"""✅ BROADCAST SENT!
+        bot.reply_to(msg, f"""✅ BROADCAST SENT!
 
 📨 Message: {message}
 ✅ Delivered: {success_count} users
