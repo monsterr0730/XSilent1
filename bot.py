@@ -366,6 +366,7 @@ def status(msg):
     
     bot.reply_to(msg, status_msg)
 
+attack access"""
 @bot.message_handler(commands=['genkey'])
 def genkey(msg):
     uid = str(msg.chat.id)
@@ -434,7 +435,6 @@ def remove_key(msg):
         bot.reply_to(msg, "❌ Key not found!")
         return
     
-    key_info = keys_data[key]
     del keys_data[key]
     save_keys(keys_data)
     
@@ -442,7 +442,6 @@ def remove_key(msg):
 
 @bot.message_handler(commands=['add'])
 def add_user(msg):
-    """Add user - gives attack access"""
     uid = str(msg.chat.id)
     
     if uid not in ADMIN_ID:
@@ -472,9 +471,7 @@ def add_user(msg):
 
 👤 User: {new_user}
 ✅ Now has attack access!
-⚡ Concurrent Attacks: 2
-
-User can now use /attack command""")
+⚡ Concurrent Attacks: 2""")
     
     try:
         bot.send_message(new_user, "✅ You have been granted attack access!\nUse /start to see commands")
@@ -483,7 +480,6 @@ User can now use /attack command""")
 
 @bot.message_handler(commands=['remove'])
 def remove_user(msg):
-    """Remove user - removes attack access"""
     uid = str(msg.chat.id)
     
     if uid not in ADMIN_ID:
@@ -505,18 +501,15 @@ def remove_user(msg):
         bot.reply_to(msg, f"❌ User {target_user} not found!")
         return
     
-    # Remove from users list
     users.remove(target_user)
     users_data["users"] = users
     save_users(users_data)
     
-    # Also remove from resellers if present
     if target_user in resellers:
         resellers.remove(target_user)
         users_data["resellers"] = resellers
         save_users(users_data)
     
-    # Stop user's active attacks
     for attack_id in user_attacks.get(target_user, []):
         if attack_id in active_attacks:
             del active_attacks[attack_id]
@@ -528,8 +521,7 @@ def remove_user(msg):
     bot.reply_to(msg, f"""✅ USER REMOVED!
 
 👤 User: {target_user}
-❌ Attack access revoked!
-💡 All active attacks stopped""")
+❌ Attack access revoked!""")
     
     try:
         bot.send_message(target_user, "⚠️ Your attack access has been revoked by owner!")
@@ -538,7 +530,6 @@ def remove_user(msg):
 
 @bot.message_handler(commands=['addreseller'])
 def add_reseller(msg):
-    """Add reseller - can generate keys"""
     uid = str(msg.chat.id)
     
     if uid not in ADMIN_ID:
@@ -560,12 +551,10 @@ def add_reseller(msg):
         bot.reply_to(msg, f"❌ User {new_reseller} is already a reseller!")
         return
     
-    # Add to resellers list
     resellers.append(new_reseller)
     users_data["resellers"] = resellers
     save_users(users_data)
     
-    # Also add to users if not already
     if new_reseller not in users:
         users.append(new_reseller)
         users_data["users"] = users
@@ -574,14 +563,7 @@ def add_reseller(msg):
     bot.reply_to(msg, f"""✅ RESELLER ADDED!
 
 👤 Reseller: {new_reseller}
-🔑 Can now generate keys using /genkey
-⚡ Also has attack access
-
-Reseller commands:
-/genkey 1 - Generate 1 day key
-/mykeys - View generated keys
-/attack - Launch attacks
-/status - Check slots""")
+🔑 Can now generate keys using /genkey""")
     
     try:
         bot.send_message(new_reseller, "✅ You have been added as RESELLER!\nYou can now generate keys using /genkey")
@@ -590,7 +572,6 @@ Reseller commands:
 
 @bot.message_handler(commands=['removereseller'])
 def remove_reseller(msg):
-    """Remove reseller - removes key generation access"""
     uid = str(msg.chat.id)
     
     if uid not in ADMIN_ID:
@@ -612,20 +593,17 @@ def remove_reseller(msg):
         bot.reply_to(msg, f"❌ User {target_reseller} is not a reseller!")
         return
     
-    # Remove from resellers list
     resellers.remove(target_reseller)
     users_data["resellers"] = resellers
     save_users(users_data)
     
-    # User still has attack access (if in users)
     bot.reply_to(msg, f"""✅ RESELLER REMOVED!
 
 👤 User: {target_reseller}
-❌ Can no longer generate keys
-💡 Still has attack access (if added via /add)""")
+❌ Can no longer generate keys""")
     
     try:
-        bot.send_message(target_reseller, "⚠️ Your reseller privileges have been removed!\nYou can still use /attack if you have access")
+        bot.send_message(target_reseller, "⚠️ Your reseller privileges have been removed!")
     except:
         pass
 
@@ -809,7 +787,7 @@ def help_cmd(msg):
 /stats - Your stats
 /genkey 1 - Generate 1 day key
 /removekey KEY - Remove key
-/add USER_ID - Add user (attack access)
+/add USER_ID - Add user
 /remove USER_ID - Remove user
 /addreseller USER_ID - Add reseller
 /removereseller USER_ID - Remove reseller
@@ -888,13 +866,6 @@ def cleanup_attacks():
 cleanup_thread = threading.Thread(target=cleanup_attacks, daemon=True)
 cleanup_thread.start()
 
-print("""
-╔════════════════════════════════════╗
-║    🔥 XSILENT BOT STARTED 🔥       ║
-║    Concurrent: 2 for everyone      ║
-║    Owner: 8487946379               ║
-╚════════════════════════════════════╝
-""")
+print("XSILENT BOT STARTED - Owner: 8487946379")
 
 bot.infinity_polling()
-```
