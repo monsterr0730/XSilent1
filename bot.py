@@ -164,7 +164,7 @@ def stats(msg):
 
 @bot.message_handler(commands=['help'])
 def help_cmd(msg):
-    bot.reply_to(msg, """🔥 PRIME X ARMY HELP
+    bot.reply_to(msg, """🔥 XSILENT ARMY HELP
 
 COMMANDS:
 /attack IP PORT TIME METHOD - Launch attack
