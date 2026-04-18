@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAGrSF59cErjIqSfdZN3hoHPy5Dk5wb6pEw"
+BOT_TOKEN = "8760406918:AAHfT23i9_dEGTlr4EMeYU0o0o49hCGo8uo"
 ADMIN_ID = ["8487946379"]
 USERS_FILE = "users.json"
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
