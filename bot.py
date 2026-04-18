@@ -126,40 +126,40 @@ def attack(msg):
 
 @bot.message_handler(commands=['methods'])
 def methods(msg):
-    bot.reply_to(msg, """⚡ ATTACK METHODS:
+    bot.reply_to(msg, """ ATTACK METHODS:
 
-🔴 UDP FLOOD - Best for gaming (BGMI, Minecraft, Valorant)
-   Ports: 443, 8080, 14000, 27015-27030
+- UDP FLOOD - Best for gaming (BGMI, Minecraft)
+  Ports: 443, 8080, 14000, 27015-27030
 
-🔵 TCP FLOOD - Best for web servers
-   Ports: 80, 443, 8080, 8443
+- TCP FLOOD - Best for web servers
+  Ports: 80, 443, 8080, 8443
 
-🟢 HTTP FLOOD - Best for websites
-   Ports: 80, 443
+- HTTP FLOOD - Best for websites
+  Ports: 80, 443
 
-🟣 OVH FLOOD - Bypass OVH protection
-   Ports: 53, 80, 443, 8080
+- OVH FLOOD - Bypass OVH protection
+  Ports: 53, 80, 443, 8080
 
-🟡 GAME FLOOD - Game server attack
-   Ports: 25565, 27015, 7777
+- GAME FLOOD - Game server attack
+  Ports: 25565, 27015, 7777
 
 Example: /attack 1.1.1.1 443 60 udp""")
-    @bot.message_handler(commands=['stats']
+
+@bot.message_handler(commands=['stats'])
 def stats(msg):
     uid = str(msg.chat.id)
-    stats_msg = f"""📊 USER STATISTICS
+    stats_msg = f"{uid} USER STATISTICS
 
-👤 User ID: {uid}
-✅ Status: {'Authorized' if uid in users or uid in ADMIN_ID else 'Unauthorized'}
-⏰ Cooldown: {'Active' if uid in cooldown else 'Ready'}
+- User ID: {uid}
+- Status: {'Authorized' if uid in users or active}
+- Cooldown: {'Active' if uid in cooldown else None}
 
-🌐 API Info:
-• Endpoint: {API_URL}
-• Status: Active
-• Max Concurrent: 1
+API Info:
+- Endpoint: {API_URL}
+- Status: Active
+- Max Concurrent: 1
 
-💬 Contact XSILENT for premium stats"""
-    
+- Contact XSILENT for premium stats"""
     bot.reply_to(msg, stats_msg)
 
 @bot.message_handler(commands=['help'])
