@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAFwwyqjFm-mbwlw7bPfro7pSTdGwSfeLVE"
+BOT_TOKEN = "8760406918:AAFcsvc7QKoBJR5cGcLmyjLyoYmyFzOSlGM"
 ADMIN_ID = ["8487946379"]
 USERS_FILE = "users.json"
 KEYS_FILE = "keys.json"
