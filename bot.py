@@ -13,7 +13,7 @@ from collections import defaultdict
 from pymongo import MongoClient
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAGAsfq3_n-ZTCO0H0pENciPySxNE4S7Ph8"
+BOT_TOKEN = "8760406918:AAEdHzZ2HDX3ILowFfMzpAs1zutEX8VUOnc"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
 API_KEY = "UYK5UU"
