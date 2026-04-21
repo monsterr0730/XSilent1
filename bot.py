@@ -13,7 +13,7 @@ from collections import defaultdict
 from pymongo import MongoClient
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAEdHzZ2HDX3ILowFfMzpAs1zutEX8VUOnc"
+BOT_TOKEN = "8760406918:AAG_gL-4kn0sO0NfacWpO6PwzhSbIiX-9co"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
 API_KEY = "WTRMWL"
@@ -22,7 +22,7 @@ MAX_CONCURRENT = 2
 # ========== MONGODB CONNECTION ==========
 MONGO_URI = "mongodb+srv://mohitrao83076_db_user:LugF1xwlenkWRE1F@monster.ydmmckl.mongodb.net/?retryWrites=true&w=majority&appName=MONSTER"
 client = MongoClient(MONGO_URI)
-db = client["xsilent_bot"]
+db = client["monster_bot"]
 users_collection = db["users"]
 keys_collection = db["keys"]
 groups_collection = db["groups"]
