@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAHhsW-LvW5ZdDkRFGMCJ2EDL9YEiwuZCR8"
+BOT_TOKEN = "8760406918:AAFOIHhACXIb96Ytt2TGH5ZopfQr97pTBeg"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
 API_KEY = "82XICX"
