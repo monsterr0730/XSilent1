@@ -27,7 +27,7 @@ API_KEY = "F6XMND"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
-MONGO_URI = "mongodb://mohitrao83076_db_user:LugF1xwlenkWRE1F@monster.ydmmckl.mongodb.net:27017/?retryWrites=true&w=majority&appName=MONSTER"
+MONGO_URI = "mongodb+srv://mohitrao83076_db_user:LugF1xwlenkWRE1F@monster.ydmmckl.mongodb.net/?retryWrites=true&w=majority&appName=MONSTER"
 client = MongoClient(MONGO_URI)
 db = client["xsilent_bot"]
 users_collection = db["users"]
