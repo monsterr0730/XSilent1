@@ -23,7 +23,7 @@ def format_ist_time(dt):
 BOT_TOKEN = "8760406918:AAFu-6PklpCuQyh0yLjzWyzikcYpzi_4KQc"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://cnc.teamc2.xyz:5001/api/attack"
-API_KEY = "F6XMND"
+API_KEY = "5OI8JJ"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
