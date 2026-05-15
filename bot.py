@@ -21,7 +21,7 @@ def time_format():
     return get_current_ist().strftime('%d %b %Y, %I:%M:%S %p')
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8411767969:AAHGoJ59mabo9WsHHqlg3J2JFOV3YJGdVbg"
+BOT_TOKEN = "8466296023:AAHt0thERT32xFfrq2DCBkDpr2wGifHnEfA"
 ADMIN_IDS = ["7192516189", "8487946379"]
 API_URL = "https://app.teamc2.xyz/api/attack"
 API_KEY = "9K6EAS"
