@@ -24,7 +24,7 @@ def time_format():
 BOT_TOKEN = "8466296023:AAHt0thERT32xFfrq2DCBkDpr2wGifHnEfA"
 ADMIN_IDS = ["7192516189", "8487946379"]
 API_URL = "https://app.teamc2.xyz/api/attack"
-API_KEY = "9K6EAS"
+API_KEY = "W1SMH5"
 PROXY_URL = "http://37.114.46.10:8888"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
