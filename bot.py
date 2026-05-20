@@ -52,7 +52,7 @@ def simple_styled(title, body):
 └─────────────────────────────────────────────┘"""
 
 # ========== CONFIG ==========
-BOT_TOKEN = "8760406918:AAGAHb9t9U3JzcwEfB7YaSfUqg-i_bClMO"
+BOT_TOKEN = "8760406918:AAGAHb9t9U3JzcwEfB7YaSfUqg-i_bClMOE"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://app.teamc2.xyz/api/attack"
 API_KEY = "W1SMH5"
