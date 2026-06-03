@@ -55,7 +55,7 @@ def simple_styled(title, body):
 BOT_TOKEN = "8760406918:AAGAHb9t9U3JzcwEfB7YaSfUqg-i_bClMOE"
 ADMIN_ID = ["8487946379"]
 API_URL = "http://app.teamc2.xyz/api/attack"
-API_KEY = "HDSG7J"
+API_KEY = "I5CHKB"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
