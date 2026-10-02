@@ -67,7 +67,7 @@ ADMIN_ID = ["8487946379"]
 
 # NEW API CONFIG
 API_URL = "https://delvorn.vynqo.in/api/attack/start"
-API_KEY = "Delvorn_Core_QB1HNAVO"
+API_KEY = "Delvorn_Core_X1UFGTXB"
 MAX_CONCURRENT = 2
 COOLDOWN_TIME = 30
 
